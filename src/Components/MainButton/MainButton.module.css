@@ -1,0 +1,21 @@
+.btn {
+    background-color: rgb(46, 186, 221);
+    outline: none;
+    border: 1px solid black;
+    border-radius: 5%;
+    margin: 5px;
+    display: block;
+    max-width: fit-content;
+    padding: 5px;
+}
+
+.btn:hover {
+    background-color: rgb(12, 153, 189);
+    color: white;
+    cursor: pointer;
+}
+
+.btn:active {
+    background-color: rgb(19, 115, 139);
+
+}
