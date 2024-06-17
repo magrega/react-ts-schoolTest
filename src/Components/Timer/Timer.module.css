@@ -1,0 +1,10 @@
+.timer {
+    border: 1px solid black;
+    padding: 0 15px;
+    border-radius: 7%;
+    margin-left: 10px;
+}
+
+.almost-out-of-time {
+    color: red;
+}

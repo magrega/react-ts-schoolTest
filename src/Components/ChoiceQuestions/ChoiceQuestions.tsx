@@ -1,4 +1,4 @@
-import styles from './QuestionCard.module.css';
+import styles from './ChoiceQuestions.module.css';
 
 interface ChoiceQuestionsProps {
     answers: string[];
@@ -7,15 +7,17 @@ interface ChoiceQuestionsProps {
 
 const ChoiceQuestions = ({ multiple = false, answers }: ChoiceQuestionsProps) => {
     return (
-        <div className={styles["card-radio-container"]}>
+        <>
             {answers.map((answer, index) => {
+                const slicedAnswer = answer.slice(0, 15);
                 return (
-                    <div key={index} className="card-radio">
-                        <input type={multiple ? "checkbox" : "radio"} id="contactChoice1" name="contact" value="answer" />
-                        <label className={styles['radio-label']} htmlFor="contactChoice1">{answer.slice(0, 15)}</label>
-                    </div>)
+                    <div key={index + answer.slice(0, 3)} className={styles["card-radio"]}>
+                        <input type={multiple ? "checkbox" : "radio"} className={multiple ? "multiple" : "single"} id={`answerChoice${index}`} name="answers" value={slicedAnswer} required />
+                        <label className={styles["radio-label"]} htmlFor={`answerChoice${index}`}>{slicedAnswer}</label>
+                    </div>
+                )
             })}
-        </div>
+        </>
     )
 }
 

@@ -1,4 +1,13 @@
 body {
   background-color: #fff;
   padding: 10px;
+  font-size: 16px;
+}
+
+a {
+  text-decoration: none;
+}
+
+input[type="text"] {
+  font-size: inherit;
 }

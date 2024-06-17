@@ -1,14 +1,10 @@
-import styles from './QuestionCard.module.css';
+const WrittenQuestions = ({ isLong = false, text, setText }: { isLong?: boolean, text: string, setText: (text: string) => void }) => {
+    const handleChange = (e: any) => setText(e.target.value);
 
-const WrittenQuestions = ({ isLong }: { isLong: boolean }) => {
-    return (
-        <div className={styles["card-text-input-container"]}>
-            {isLong ?
-                <textarea rows={10} cols={45} name="text"></textarea> :
-                <input type='text' />
-            }
-        </div>
-    )
+    return isLong ?
+        <textarea rows={10} cols={45} name="text" required value={text} onChange={handleChange} />
+        :
+        <input type="text" required value={text} onChange={handleChange} />
 }
 
 export default WrittenQuestions;
