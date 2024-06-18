@@ -15,5 +15,10 @@ export const getTestData = () => {
         }
     };
 
-    return [fetchTestData(questionsUrl), fetchTestData(answersUrl)];
+    return Promise.all([fetchTestData(questionsUrl), fetchTestData(answersUrl)])
+        .then(responseArray => {
+            const questions = responseArray[0].slice(0, 10).map((question: { body: string }) => question.body);
+            const answers = responseArray[1].slice(0, 40).map((answers: { body: string }) => answers.body);
+            return [questions, answers]
+        });
 }

@@ -76,10 +76,8 @@ const QuestionCard = ({ type }: { type: string }) => {
 
     // fetch data
     useEffect(() => {
-        Promise.all(getTestData()).then(responseArray => {
-            const questions = responseArray[0].slice(0, 10).map((question: { body: string }) => question.body);
+        getTestData().then(([questions, answers]) => {
             setQuestions(questions);
-            const answers = responseArray[1].slice(0, 40).map((answers: { body: string }) => answers.body);
             setAnswers(answers);
             setIsLoading(false);
         }).catch(e => alert(`Error occured, try later. ${e}`));
