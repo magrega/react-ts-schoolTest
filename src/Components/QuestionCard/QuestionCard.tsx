@@ -1,13 +1,15 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { Card, Button, Checkbox, Divider, Form, Input, Radio, Steps } from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import Paragraph from 'antd/es/typography/Paragraph';
+import Title from 'antd/es/typography/Title';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getTestData } from '../../services/fakeapi';
 import BackToMenuButton from '../BackToMenuButton/BackToMenuButton';
-import ChoiceQuestions from '../ChoiceQuestions/ChoiceQuestions';
 import Loader from '../Loader/Loader';
 import MainMenu from '../MainMenu/MainMenu';
 import Timer from '../Timer/Timer';
-import WrittenQuestions from '../WrittenQuestions/WrittenQuestions';
 import styles from './QuestionCard.module.css';
-import { getTestData } from '../../services/fakeapi';
 
 const QuestionCard = ({ type }: { type: string }) => {
     const lSquestionNum = JSON.parse(localStorage.getItem('questionNum')!);
@@ -23,10 +25,8 @@ const QuestionCard = ({ type }: { type: string }) => {
     const [questionNum, setQuestionNum] = useState<number>(lSquestionNum || 0);
     const [answersBatchNum, setAnswersBatchNum] = useState<number>(lSanswersBatchNum || 0);
 
-    const [userAnswer, setUserAnswer] = useState<string[]>([]);
+    const [userAnswer, setUserAnswer] = useState({});
     const [allUserAnswers, setAllUserAnswers] = useState<{}>(lSallUserAnswers || {});
-
-    const [writtenAnswer, setWrittenAnswer] = useState('');
 
     const currentAnswers = answers.slice(answersBatchNum, answersBatchNum + 4);
 
@@ -35,43 +35,24 @@ const QuestionCard = ({ type }: { type: string }) => {
     const renderQuestionType = (type: string) => { // why type string again?
         switch (type) {
             case 'single-choice':
-                return <ChoiceQuestions answers={currentAnswers} />;
+                return <Radio.Group className={styles.group} options={currentAnswers} />;
             case 'multiple-choice':
-                return <ChoiceQuestions answers={currentAnswers} multiple />;
+                return <Checkbox.Group className={styles.group} options={currentAnswers} />
             case 'short-written':
-                return <WrittenQuestions text={writtenAnswer} setText={setWrittenAnswer} />;
+                return <Input autoFocus />;
             case 'long-written':
-                return <WrittenQuestions text={writtenAnswer} setText={setWrittenAnswer} isLong />;
+                return <TextArea autoFocus />;
             default:
                 return <MainMenu />;
         }
     }
 
-    const handleFormChange = (e: ChangeEvent<HTMLFormElement>) => {
-        const target = e.target;
-        const answerValue = target.value;
-        const inputType = target.form.querySelector('input')?.type;
+    const handleFormChange = (answer: {}) => setUserAnswer(answer);
 
-        if (inputType === 'checkbox') {
-            const checkboxes = [...e.target.form.querySelectorAll('.multiple')];
-
-            const isSomeChecked = checkboxes.some(input => input.checked === true);
-            checkboxes.forEach(input => isSomeChecked ? input.required = false : input.required = true);
-
-            if (userAnswer.includes(answerValue)) {
-                setUserAnswer(prev => prev.filter(answer => answer !== answerValue));
-            } else { setUserAnswer(prev => [...prev, answerValue]); }
-
-        } else setUserAnswer([answerValue]);
-    }
-
-    const handleNextQuestion = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setAllUserAnswers(prev => ({ ...prev, [questionNum]: userAnswer }));
+    const handleNextQuestion = () => {
+        setAllUserAnswers(prev => ({ ...prev, ...userAnswer }));
         setQuestionNum(prev => prev + 1);
         setAnswersBatchNum(prev => prev + 4);
-        setUserAnswer([]);
-        setWrittenAnswer("");
     }
 
     // fetch data
@@ -99,27 +80,44 @@ const QuestionCard = ({ type }: { type: string }) => {
 
     return (
         <div className={styles['quiz-container']}>
-            <div className={styles["quiz-heading-container"]}>
-                <h1 className={styles['quiz-title']}>Test in progress</h1>
+            <Title className={styles['quiz-title']}>Test in progress</Title>
+            <div className={styles["quiz-indicators"]}>
+                <p style={{ marginRight: '5px' }}>Question</p>
+                <Steps className={styles.steps}
+                    percent={(100 / questions.length * (questionNum + 1)) - 1}
+                    size="default"
+                    responsive={false}
+                    initial={questionNum}
+                    items={[{ status: 'process' }]}
+                />
                 <Timer setIsTimeOut={setIsTimeOut} />
             </div>
-            <div className={styles['quiz-progress-bar']}>
-                {questions.map((_, index) => {
-                    const isCurrent = index === questionNum ? `${styles['current-question']}` : "";
-                    const isAnswered = index < questionNum ? `${styles.answered}` : "";
-                    return <span key={index} className={`${styles.bar} ${isCurrent} ${isAnswered}`} />
-                })
-                }
-            </div>
-            <div className={styles.card}>
-                <p className={styles['card-question']}>{`${questions[questionNum]}?`}</p>
-                <form onChange={handleFormChange} onSubmit={handleNextQuestion} id='quiz' className={styles["card-radio-container"]}>
-                    {renderQuestionType(type)}
-                    <button className={styles['quiz-submit-btn']} type='submit'>{questionNum + 1 === questions.length ? "Результаты" : "Ответить"}</button>
-                </form>
-            </div>
+            <Card className={styles.card}>
+                <Paragraph className={styles['card-question']}>{questions[questionNum]}</Paragraph>
+                <Divider />
+                <Form
+                    name={`question${questionNum}`}
+                    onFinish={handleNextQuestion}
+                    onValuesChange={handleFormChange}
+                    autoComplete="off"
+                >
+                    <Form.Item
+                        name={`answers${questionNum}`}
+                        rules={[{ required: true, message: 'Enter your answer!' }]}
+                    >
+                        {renderQuestionType(type)}
+                    </Form.Item>
+
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            {questionNum + 1 === questions.length ? "Результаты" : "Ответить"}
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </Card>
             <BackToMenuButton />
         </div>
+
     )
 }
 

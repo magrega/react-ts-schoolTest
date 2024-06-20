@@ -4,61 +4,44 @@
     align-items: center;
 }
 
-.quiz-heading-container {
-    margin-bottom: 5px;
-    text-align: center;
-}
-
-.quiz-progress-bar {
+.quiz-indicators {
     display: flex;
-    flex-wrap: wrap;
-    margin: 5px 0;
-    justify-content: center;
-}
-
-.bar {
-    width: 38px;
-    height: 6px;
-    margin: 3px;
-    background-color: black;
-}
-
-.current-question {
-    background-color: rgb(156, 47, 156);
-}
-
-.answered {
-    background-color: grey;
-}
-
-.card {
-    max-width: 550px;
-    border: 1px solid black;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
+    align-items: center;
     margin-bottom: 10px;
 }
 
+.card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 550px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
 .card-question {
+    font-size: 18px;
     font-weight: bold;
     text-align: center;
-    min-height: 100px;
-    margin-bottom: 0;
+    min-height: 120px;
 }
 
-.card-radio-container {
-    text-align: left;
-    margin: 10px 0;
+@media (max-width: 768px) {
+    .card-question {
+        min-height: 200px;
+    }
 }
 
-.quiz-submit-btn {
-    display: block;
-    margin-top: 15px;
+.steps {
+    flex-direction: column;
+    align-items: center;
 }
 
-.loader-container {
-    width: 550px;
-    height: 300px;
+.group {
+    display: flex;
+    flex-direction: column;
+}
+
+.group>* {
+    margin-bottom: 10px;
 }

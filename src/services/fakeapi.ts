@@ -17,8 +17,8 @@ export const getTestData = () => {
 
     return Promise.all([fetchTestData(questionsUrl), fetchTestData(answersUrl)])
         .then(responseArray => {
-            const questions = responseArray[0].slice(0, 10).map((question: { body: string }) => question.body);
-            const answers = responseArray[1].slice(0, 40).map((answers: { body: string }) => answers.body);
+            const questions = responseArray[0].slice(0, 10).map((question: { body: string }) => question.body + '?');
+            const answers = responseArray[1].slice(0, 40).map((answers: { body: string }) => answers.body.slice(0, 15).trim());
             return [questions, answers]
         });
 }

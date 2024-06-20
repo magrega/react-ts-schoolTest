@@ -2,8 +2,5 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-
-.result-answers {
     text-align: center;
 }
