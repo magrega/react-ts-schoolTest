@@ -1,12 +1,11 @@
-import { Button, Card } from "antd";
-import Title from "antd/es/typography/Title";
+import { Button, Card, Typography } from "antd";
 import { Link } from "react-router-dom";
 import styles from './MainMenu.module.css';
 
 const MainMenu = () => {
     return (
         <div className={styles['mainmenu-container']}>
-            <Title>Main Menu</Title>
+            <Typography.Title>Main Menu</Typography.Title>
             <Card className={styles['mainmenu-container']}>
                 <Link tabIndex={0} to={`single-choice`}>
                     <Button tabIndex={-1} className={styles.btn} type="primary">Single choice</Button>

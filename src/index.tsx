@@ -1,5 +1,4 @@
 import ReactDOM from 'react-dom/client';
-import { StrictMode } from 'react';
 import {
   createBrowserRouter,
   Navigate,
@@ -7,8 +6,8 @@ import {
 } from "react-router-dom";
 import App from './App';
 import QuestionCard from './Components/QuestionCard/QuestionCard';
-import './index.css';
 import Results from './Components/Result/Result';
+import './index.css';
 
 const router = createBrowserRouter([
   {

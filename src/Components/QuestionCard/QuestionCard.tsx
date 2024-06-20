@@ -1,7 +1,4 @@
-import { Card, Button, Checkbox, Divider, Form, Input, Radio, Steps } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
-import Paragraph from 'antd/es/typography/Paragraph';
-import Title from 'antd/es/typography/Title';
+import { Card, Button, Checkbox, Divider, Form, Input, Radio, Steps, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getTestData } from '../../services/fakeapi';
@@ -41,7 +38,7 @@ const QuestionCard = ({ type }: { type: string }) => {
             case 'short-written':
                 return <Input autoFocus />;
             case 'long-written':
-                return <TextArea autoFocus />;
+                return <Input.TextArea autoFocus />;
             default:
                 return <MainMenu />;
         }
@@ -80,7 +77,7 @@ const QuestionCard = ({ type }: { type: string }) => {
 
     return (
         <div className={styles['quiz-container']}>
-            <Title className={styles['quiz-title']}>Test in progress</Title>
+            <Typography.Title className={styles['quiz-title']}>Test in progress</Typography.Title>
             <div className={styles["quiz-indicators"]}>
                 <p style={{ marginRight: '5px' }}>Question</p>
                 <Steps className={styles.steps}
@@ -93,7 +90,7 @@ const QuestionCard = ({ type }: { type: string }) => {
                 <Timer setIsTimeOut={setIsTimeOut} />
             </div>
             <Card className={styles.card}>
-                <Paragraph className={styles['card-question']}>{questions[questionNum]}</Paragraph>
+                <Typography.Paragraph className={styles['card-question']}>{questions[questionNum]}</Typography.Paragraph>
                 <Divider />
                 <Form
                     name={`question${questionNum}`}
