@@ -2,25 +2,23 @@ import { Button, Card, Checkbox, Divider, Form, Input, Radio, Steps, Typography 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchData, setAllUserAnswers, setIsTimeout, setNextQuestion, setUserAnswer } from '../../state/questionCard/questionCard';
+import { fetchData, setNextQuestion, setUserAnswer } from '../../state/questionCard/questionCard';
 import { AppDispatch, RootState } from '../../state/store';
 import BackToMenuButton from '../BackToMenuButton/BackToMenuButton';
+import ErrorPage from '../ErrorPage/ErrorPage';
 import Loader from '../Loader/Loader';
 import MainMenu from '../MainMenu/MainMenu';
 import Timer from '../Timer/Timer';
 import styles from './QuestionCard.module.css';
-import ErrorPage from '../ErrorPage/ErrorPage';
 
 const QuestionCard = ({ type }: { type: string }) => {
-    console.log('render');
-    
-
-    const { isLoading, isTimeOut, questions, answers, questionNum, answersBatchNum, userAnswer, allUserAnswers, isError } = useSelector((state: RootState) => state.questionCard);
-    const dispatch = useDispatch<AppDispatch>();
-
-    const currentAnswers = answers.slice(answersBatchNum, answersBatchNum + 4);
-
     const navigate = useNavigate();
+    const { isLoading, isTimeOut, questionNum, isError } = useSelector((state: RootState) => state.questionCard);
+    const questions = useSelector((state: RootState) => state.questionCard.questions);
+    const currentAnswers = useSelector((state: RootState) => state.questionCard.currentAnswers);
+    const allUserAnswers = useSelector((state: RootState) => state.questionCard.allUserAnswers);
+
+    const dispatch = useDispatch<AppDispatch>();
 
     const renderQuestionType = (type: string) => {
         switch (type) {
@@ -38,15 +36,10 @@ const QuestionCard = ({ type }: { type: string }) => {
     }
 
     const handleFormChange = (answer: {}) => dispatch(setUserAnswer(answer));
-
-    const handleNextQuestion = () => {
-        dispatch(setAllUserAnswers(userAnswer));
-        dispatch(setNextQuestion());
-    }
+    const handleNextQuestion = () => dispatch(setNextQuestion());
 
     // fetch data
     useEffect(() => { dispatch(fetchData()); }, [dispatch]);
-
 
     // check if the test ended
     useEffect(() => {
@@ -68,7 +61,7 @@ const QuestionCard = ({ type }: { type: string }) => {
                     initial={questionNum}
                     items={[{ status: 'process' }]}
                 />
-                <Timer setIsTimeOut={setIsTimeout} />
+                <Timer />
             </div>
             <Card className={styles.card}>
                 <Typography.Paragraph className={styles['card-question']}>{questions[questionNum]}</Typography.Paragraph>

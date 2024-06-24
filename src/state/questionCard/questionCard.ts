@@ -12,6 +12,7 @@ export interface QuestionCardState {
     userAnswer: {};
     allUserAnswers: {};
     timer: number;
+    currentAnswers: string[];
 }
 const desiredTime = 15 * 60;
 
@@ -29,7 +30,8 @@ const initialState: QuestionCardState = {
     answersBatchNum: lSanswersBatchNum || 0,
     userAnswer: {},
     allUserAnswers: lSallUserAnswers || {},
-    timer: JSON.parse(localStorage.getItem('timer')!) || desiredTime
+    timer: JSON.parse(localStorage.getItem('timer')!) || desiredTime,
+    currentAnswers: []
 }
 
 const questionCardSlice = createSlice({
@@ -60,6 +62,8 @@ const questionCardSlice = createSlice({
         setNextQuestion: (state) => {
             state.questionNum++;
             state.answersBatchNum = state.answersBatchNum + 4;
+            state.allUserAnswers = { ...state.allUserAnswers, ...state.userAnswer };
+            state.currentAnswers = state.answers.slice(state.answersBatchNum, state.answersBatchNum + 4);
         },
         resetCard: () => {
             return { ...initialState, questionNum: 0, answersBatchNum: 0, allUserAnswers: {}, timer: desiredTime }
@@ -70,11 +74,11 @@ const questionCardSlice = createSlice({
             .addCase(fetchData.fulfilled, (state, action: PayloadAction<string[][]>) => {
                 state.questions = action.payload[0];
                 state.answers = action.payload[1];
+                state.currentAnswers = state.answers.slice(state.answersBatchNum, state.answersBatchNum + 4);
                 state.isLoading = false;
             })
             .addCase(
                 fetchData.rejected, (state) => {
-                    console.log('failed');
                     state.isError = true;
                 })
     }

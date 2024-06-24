@@ -6,10 +6,11 @@ startAppListening({
     matcher: isAnyOf(countdown, setNextQuestion, setAllUserAnswers),
     effect: ({ type }, { getState }) => {
         if (type === 'questionCard/countdown') localStorage.setItem('timer', JSON.stringify(getState().questionCard.timer));
-        if (type === 'questionCard/setQuestionNum') localStorage.setItem('questionNum', JSON.stringify(getState().questionCard.questionNum));
-        if (type === 'questionCard/setAnswersBatchNum') localStorage.setItem('answersBatchNum', JSON.stringify(getState().questionCard.answersBatchNum));
-        if (type === 'questionCard/setAllUserAnswers') localStorage.setItem('allUserAnswers', JSON.stringify(getState().questionCard.allUserAnswers));
-    }
+        if (type === 'questionCard/setNextQuestion') {
+            localStorage.setItem('allUserAnswers', JSON.stringify(getState().questionCard.allUserAnswers));
+            localStorage.setItem('answersBatchNum', JSON.stringify(getState().questionCard.answersBatchNum));
+            localStorage.setItem('questionNum', JSON.stringify(getState().questionCard.questionNum));
+        }}
 });
 
 export const store = configureStore({
