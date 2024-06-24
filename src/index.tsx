@@ -8,6 +8,8 @@ import App from './App';
 import QuestionCard from './Components/QuestionCard/QuestionCard';
 import Results from './Components/Result/Result';
 import './index.css';
+import { Provider } from 'react-redux';
+import { store } from './state/store';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +51,7 @@ const root = ReactDOM.createRoot(
 root.render(
   // <StrictMode>
   //   </StrictMode>
-  <RouterProvider router={router} />
-
+  <Provider store={store}>
+    <RouterProvider router={router} />
+  </Provider >
 );

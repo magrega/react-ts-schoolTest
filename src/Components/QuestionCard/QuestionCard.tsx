@@ -1,35 +1,28 @@
-import { Card, Button, Checkbox, Divider, Form, Input, Radio, Steps, Typography } from 'antd';
-import { useEffect, useState } from 'react';
+import { Button, Card, Checkbox, Divider, Form, Input, Radio, Steps, Typography } from 'antd';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getTestData } from '../../services/fakeapi';
+import { fetchData, setAllUserAnswers, setIsTimeout, setNextQuestion, setUserAnswer } from '../../state/questionCard/questionCard';
+import { AppDispatch, RootState } from '../../state/store';
 import BackToMenuButton from '../BackToMenuButton/BackToMenuButton';
 import Loader from '../Loader/Loader';
 import MainMenu from '../MainMenu/MainMenu';
 import Timer from '../Timer/Timer';
 import styles from './QuestionCard.module.css';
+import ErrorPage from '../ErrorPage/ErrorPage';
 
 const QuestionCard = ({ type }: { type: string }) => {
-    const lSquestionNum = JSON.parse(localStorage.getItem('questionNum')!);
-    const lSanswersBatchNum = JSON.parse(localStorage.getItem('answersBatchNum')!);
-    const lSallUserAnswers = JSON.parse(localStorage.getItem('allUserAnswers')!);
+    console.log('render');
+    
 
-    const [isLoading, setIsLoading] = useState(true);
-    const [isTimeOut, setIsTimeOut] = useState(false);
-
-    const [questions, setQuestions] = useState<string[]>([]);
-    const [answers, setAnswers] = useState<string[]>([]);
-
-    const [questionNum, setQuestionNum] = useState<number>(lSquestionNum || 0);
-    const [answersBatchNum, setAnswersBatchNum] = useState<number>(lSanswersBatchNum || 0);
-
-    const [userAnswer, setUserAnswer] = useState({});
-    const [allUserAnswers, setAllUserAnswers] = useState<{}>(lSallUserAnswers || {});
+    const { isLoading, isTimeOut, questions, answers, questionNum, answersBatchNum, userAnswer, allUserAnswers, isError } = useSelector((state: RootState) => state.questionCard);
+    const dispatch = useDispatch<AppDispatch>();
 
     const currentAnswers = answers.slice(answersBatchNum, answersBatchNum + 4);
 
     const navigate = useNavigate();
 
-    const renderQuestionType = (type: string) => { // why type string again?
+    const renderQuestionType = (type: string) => {
         switch (type) {
             case 'single-choice':
                 return <Radio.Group className={styles.group} options={currentAnswers} />;
@@ -44,35 +37,23 @@ const QuestionCard = ({ type }: { type: string }) => {
         }
     }
 
-    const handleFormChange = (answer: {}) => setUserAnswer(answer);
+    const handleFormChange = (answer: {}) => dispatch(setUserAnswer(answer));
 
     const handleNextQuestion = () => {
-        setAllUserAnswers(prev => ({ ...prev, ...userAnswer }));
-        setQuestionNum(prev => prev + 1);
-        setAnswersBatchNum(prev => prev + 4);
+        dispatch(setAllUserAnswers(userAnswer));
+        dispatch(setNextQuestion());
     }
 
     // fetch data
-    useEffect(() => {
-        getTestData().then(([questions, answers]) => {
-            setQuestions(questions);
-            setAnswers(answers);
-            setIsLoading(false);
-        }).catch(e => alert(`Error occured, try later. ${e}`));
-    }, [])
+    useEffect(() => { dispatch(fetchData()); }, [dispatch]);
+
 
     // check if the test ended
     useEffect(() => {
         if ((questions.length && questionNum === questions.length) || isTimeOut) navigate('/results', { state: allUserAnswers });
     }, [allUserAnswers, questionNum, questions.length, navigate, isTimeOut])
 
-    // save data in localStorage
-    useEffect(() => {
-        localStorage.setItem('questionNum', JSON.stringify(questionNum));
-        localStorage.setItem('answersBatchNum', JSON.stringify(answersBatchNum));
-        localStorage.setItem('allUserAnswers', JSON.stringify(allUserAnswers));
-    }, [questionNum, answersBatchNum, allUserAnswers]);
-
+    if (isError) return <ErrorPage />
     if (isLoading) return <Loader />
 
     return (
@@ -87,7 +68,7 @@ const QuestionCard = ({ type }: { type: string }) => {
                     initial={questionNum}
                     items={[{ status: 'process' }]}
                 />
-                <Timer setIsTimeOut={setIsTimeOut} />
+                <Timer setIsTimeOut={setIsTimeout} />
             </div>
             <Card className={styles.card}>
                 <Typography.Paragraph className={styles['card-question']}>{questions[questionNum]}</Typography.Paragraph>
@@ -114,8 +95,6 @@ const QuestionCard = ({ type }: { type: string }) => {
             </Card>
             <BackToMenuButton />
         </div>
-
     )
 }
-
 export default QuestionCard;

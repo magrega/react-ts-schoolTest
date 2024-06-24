@@ -1,33 +1,31 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from '../../state/store';
 import styles from './Timer.module.css';
+import { countdown } from '../../state/questionCard/questionCard';
 
 const Timer = ({ setIsTimeOut }: { setIsTimeOut: (bool: boolean) => void }) => {
 
-    const lSTimer = JSON.parse(localStorage.getItem('timer')!);
-
-    const [timer, setTimer] = useState<number>(lSTimer || 15 * 60);
+    const countdownValue = useSelector((state: RootState) => state.questionCard.timer);
+    const dispatch = useDispatch<AppDispatch>();
 
     useEffect(() => {
         const timerCountdown = setTimeout(() => {
-            if (timer === 0) {
+            if (countdownValue === 0) {
                 clearTimeout(timerCountdown);
                 setIsTimeOut(true);
             };
-            localStorage.setItem('timer', JSON.stringify(timer - 1));
-            setTimer(prev => prev - 1);
+            dispatch(countdown());
         }, 1000);
 
-        return (() => {
-            clearTimeout(timerCountdown);
-        })
-    }, [timer, setIsTimeOut]);
+        return (() => clearTimeout(timerCountdown))
+    }, [dispatch, countdownValue, setIsTimeOut]);
 
     return (
-        <span className={timer < 60 ? `${styles.timer} ${styles['almost-out-of-time']}` : styles.timer}>
-            {`${Math.floor(timer / 60)}`.padStart(2, '0')} : {`${timer % 60}`.padStart(2, '0')}
+        <span className={countdownValue < 60 ? `${styles.timer} ${styles['almost-out-of-time']}` : styles.timer}>
+            {`${Math.floor(countdownValue / 60)}`.padStart(2, '0')} : {`${countdownValue % 60}`.padStart(2, '0')}
         </span>
     )
-
 }
 
 export default Timer;
