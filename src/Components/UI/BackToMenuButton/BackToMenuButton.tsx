@@ -1,8 +1,8 @@
 import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../state/store";
-import { resetCard } from "../../state/questionCard/questionCard";
+import { AppDispatch } from "../../../state/store";
+import { resetCard } from "../../../state/questionCard/questionCard";
 
 const BackToMenuButton = () => {
     const dispatch = useDispatch<AppDispatch>();

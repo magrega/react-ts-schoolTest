@@ -10,7 +10,8 @@ startAppListening({
             localStorage.setItem('allUserAnswers', JSON.stringify(getState().questionCard.allUserAnswers));
             localStorage.setItem('answersBatchNum', JSON.stringify(getState().questionCard.answersBatchNum));
             localStorage.setItem('questionNum', JSON.stringify(getState().questionCard.questionNum));
-        }}
+        }
+    }
 });
 
 export const store = configureStore({

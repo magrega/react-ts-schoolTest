@@ -1,5 +1,5 @@
 import { Typography } from "antd"
-import BackToMenuButton from "../BackToMenuButton/BackToMenuButton"
+import BackToMenuButton from '../UI/BackToMenuButton/BackToMenuButton';
 import styles from './ErrorPage.module.css';
 
 const ErrorPage = () => {

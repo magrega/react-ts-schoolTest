@@ -4,11 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchData, setNextQuestion, setUserAnswer } from '../../state/questionCard/questionCard';
 import { AppDispatch, RootState } from '../../state/store';
-import BackToMenuButton from '../BackToMenuButton/BackToMenuButton';
 import ErrorPage from '../ErrorPage/ErrorPage';
-import Loader from '../Loader/Loader';
 import MainMenu from '../MainMenu/MainMenu';
 import Timer from '../Timer/Timer';
+import BackToMenuButton from '../UI/BackToMenuButton/BackToMenuButton';
+import Loader from '../UI/Loader/Loader';
 import styles from './QuestionCard.module.css';
 
 const QuestionCard = ({ type }: { type: string }) => {

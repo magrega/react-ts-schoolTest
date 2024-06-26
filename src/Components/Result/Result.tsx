@@ -1,6 +1,6 @@
 import { List, Typography } from "antd";
 import { Navigate, useLocation } from "react-router-dom";
-import BackToMenuButton from "../BackToMenuButton/BackToMenuButton";
+import BackToMenuButton from '../UI/BackToMenuButton/BackToMenuButton';
 import styles from './Result.module.css';
 
 const Results = () => {
