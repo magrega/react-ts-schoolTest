@@ -1,6 +1,7 @@
 import { configureStore, isAnyOf } from "@reduxjs/toolkit";
 import { listenerMiddleware, startAppListening } from "./listenerMiddleware";
 import questionCardReducer, { countdown, setAllUserAnswers, setNextQuestion } from "./questionCard/questionCard";
+import timerReducer from "./timer/timer";
 
 startAppListening({
     matcher: isAnyOf(countdown, setNextQuestion, setAllUserAnswers),
@@ -17,6 +18,7 @@ startAppListening({
 export const store = configureStore({
     reducer: {
         questionCard: questionCardReducer,
+        timer: timerReducer
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().prepend(listenerMiddleware.middleware)
 })

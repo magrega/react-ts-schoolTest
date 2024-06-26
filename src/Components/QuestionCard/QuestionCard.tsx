@@ -13,10 +13,14 @@ import styles from './QuestionCard.module.css';
 
 const QuestionCard = ({ type }: { type: string }) => {
     const navigate = useNavigate();
-    const { isLoading, isTimeOut, questionNum, isError } = useSelector((state: RootState) => state.questionCard);
+    const isError = useSelector((state: RootState) => state.questionCard.isError);
+    const isLoading = useSelector((state: RootState) => state.questionCard.isLoading);
+    const isTimeOut = useSelector((state: RootState) => state.questionCard.isTimeOut);
     const questions = useSelector((state: RootState) => state.questionCard.questions);
+    const questionNum = useSelector((state: RootState) => state.questionCard.questionNum);
     const currentAnswers = useSelector((state: RootState) => state.questionCard.currentAnswers);
     const allUserAnswers = useSelector((state: RootState) => state.questionCard.allUserAnswers);
+
 
     const dispatch = useDispatch<AppDispatch>();
 
