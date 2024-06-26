@@ -21,7 +21,6 @@ const QuestionCard = ({ type }: { type: string }) => {
     const currentAnswers = useSelector((state: RootState) => state.questionCard.currentAnswers);
     const allUserAnswers = useSelector((state: RootState) => state.questionCard.allUserAnswers);
 
-
     const dispatch = useDispatch<AppDispatch>();
 
     const renderQuestionType = (type: string) => {
