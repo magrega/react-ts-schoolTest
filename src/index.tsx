@@ -1,15 +1,16 @@
-import ReactDOM from 'react-dom/client';
+import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
 import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import App from './App';
-import QuestionCard from './Components/QuestionCard/QuestionCard';
-import Results from './Components/Result/Result';
-import './index.css';
-import { Provider } from 'react-redux';
-import { store } from './state/store';
+import App from "./App";
+import QuestionCard from "./Components/QuestionCard/QuestionCard";
+import Results from "./Components/Result/Result";
+import "./index.css";
+import { store } from "./state/store";
+import { StrictMode } from "react";
 
 const router = createBrowserRouter([
   {
@@ -39,19 +40,18 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <Navigate to="/" replace />,
-  }
+  },
 ]);
 
-<RouterProvider router={router} />
-
+<RouterProvider router={router} />;
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
-  // <StrictMode>
-  //   </StrictMode>
-  <Provider store={store}>
-    <RouterProvider router={router} />
-  </Provider >
+  <StrictMode>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
+  </StrictMode>
 );

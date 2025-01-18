@@ -1,16 +1,22 @@
 import { Button } from "antd";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../../state/store";
+import { Link } from "react-router-dom";
 import { resetCard } from "../../../state/questionCard/questionCard";
+import { AppDispatch } from "../../../state/store";
 
 const BackToMenuButton = () => {
-    const dispatch = useDispatch<AppDispatch>();
-    const clearState = () => {
-        dispatch(resetCard());
-        localStorage.clear();
-    }
-    return <Link to={`/`}><Button danger onClick={clearState}>Back to Menu</Button></Link>;
-}
+  const dispatch = useDispatch<AppDispatch>();
+  const clearState = () => {
+    dispatch(resetCard());
+    localStorage.clear();
+  };
+  return (
+    <Link tabIndex={-1} to={`/`}>
+      <Button danger onClick={clearState}>
+        Back to Menu
+      </Button>
+    </Link>
+  );
+};
 
 export default BackToMenuButton;
