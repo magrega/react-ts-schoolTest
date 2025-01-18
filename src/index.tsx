@@ -1,14 +1,14 @@
-import ReactDOM from 'react-dom/client';
-import { StrictMode } from 'react';
+import { StrictMode } from "react";
+import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
 } from "react-router-dom";
-import App from './App';
-import QuestionCard from './Components/QuestionCard/QuestionCard';
-import './index.css';
-import Results from './Components/Result/Result';
+import App from "./App";
+import QuestionCard from "./Components/QuestionCard/QuestionCard";
+import Results from "./Components/Result/Result";
+import "./index.css";
 
 const router = createBrowserRouter([
   {
@@ -38,18 +38,16 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <Navigate to="/" replace />,
-  }
+  },
 ]);
 
-<RouterProvider router={router} />
-
+<RouterProvider router={router} />;
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
-  // <StrictMode>
-  //   </StrictMode>
-  <RouterProvider router={router} />
-
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>
 );
